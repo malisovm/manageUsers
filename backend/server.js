@@ -9,8 +9,7 @@ const expressServer = express()
 const JSONParser = express.json({ type: 'application/json' })
 
 mongoose.connect(
-  //'mongodb+srv://user12345:12345@cluster1.mgmwwie.mongodb.net/myusers_react',
-  'mongodb://localhost:27017/usersdb',
+  'mongodb+srv://user12345:12345@cluster1.mgmwwie.mongodb.net/manageUsers',
   {
     useUnifiedTopology: true,
     useNewUrlParser: true,
