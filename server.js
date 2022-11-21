@@ -2,15 +2,14 @@ const express = require('express')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const expressServer = express()
-//expressServer.use(express.static(__dirname + '/app'))
-//expressServer.get('/', function (request, response) {
-//  response.sendFile(__dirname + '/app/index.html')
-//})
+expressServer.use(express.static(__dirname + '/app'))
+expressServer.get('/', function (request, response) {
+  response.sendFile(__dirname + '/app/index.html')
+})
 const JSONParser = express.json({ type: 'application/json' })
 
 mongoose.connect(
-  //'mongodb+srv://user12345:12345@cluster1.mgmwwie.mongodb.net/myusers_react',
-  'mongodb://localhost:27017/usersdb',
+  'mongodb+srv://user12345:12345@cluster1.mgmwwie.mongodb.net/manageUsers',
   {
     useUnifiedTopology: true,
     useNewUrlParser: true,
