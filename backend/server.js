@@ -6,6 +6,12 @@ const expressServer = express()
 //expressServer.get('/', function (request, response) {
 //  response.sendFile(__dirname + '/app/index.html')
 //})
+//expressServer.get('/signup', function (request, response) {
+//  response.sendFile(__dirname + '/app/index.html')
+//})
+//expressServer.get('/users', function (request, response) {
+//  response.sendFile(__dirname + '/app/index.html')
+//})
 const JSONParser = express.json({ type: 'application/json' })
 
 mongoose.connect(
@@ -35,7 +41,7 @@ const usersScheme = new Schema({
 })
 const User = mongoose.model('User', usersScheme)
 
-expressServer.get('/users', (request, response) => {
+expressServer.get('/getusers', (request, response) => {
   User.find({}, (err, users) => {
     if (err) console.log(err)
     else response.send(users)
