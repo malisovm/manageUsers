@@ -6,6 +6,12 @@ expressServer.use(express.static(__dirname + '/app'))
 expressServer.get('/', function (request, response) {
   response.sendFile(__dirname + '/app/index.html')
 })
+expressServer.get('/signup', function (request, response) {
+  response.sendFile(__dirname + '/app/index.html')
+})
+expressServer.get('/users', function (request, response) {
+  response.sendFile(__dirname + '/app/index.html')
+})
 const JSONParser = express.json({ type: 'application/json' })
 
 mongoose.connect(
