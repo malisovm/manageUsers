@@ -2,10 +2,10 @@ const express = require('express')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const expressServer = express()
-//expressServer.use(express.static(__dirname + '/app'))
-//expressServer.get('/', function (request, response) {
-//  response.sendFile(__dirname + '/app/index.html')
-//})
+expressServer.use(express.static(__dirname + '/app'))
+expressServer.get('/', function (request, response) {
+  response.sendFile(__dirname + '/app/index.html')
+})
 const JSONParser = express.json({ type: 'application/json' })
 
 mongoose.connect(
