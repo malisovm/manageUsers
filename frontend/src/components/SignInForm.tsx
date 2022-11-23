@@ -17,7 +17,7 @@ export default function SignInForm() {
   const [verifyUser] = useVerifyUserMutation()
   const dispatch = useAppDispatch()
 
-  function useHandleSubmit(e: React.SyntheticEvent) {
+  function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault()
     verifyUser({
       name: nameRef!.current!.value,
@@ -49,7 +49,7 @@ export default function SignInForm() {
     <Container>
       <h3>Log in</h3>
       <br />
-      <Form onSubmit={useHandleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Username</Form.Label>
           <Form.Control
