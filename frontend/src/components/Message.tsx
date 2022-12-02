@@ -4,7 +4,11 @@ import { Alert } from 'react-bootstrap'
 interface IProps {
   variant: string
   text: string
-  setMessage: (message: {variant: string, text: string, show: boolean}) => void
+  setMessage: (message: {
+    variant: string
+    text: string
+    show: boolean
+  }) => void
 }
 
 export default function Message({ variant, text, setMessage }: IProps) {
@@ -13,7 +17,7 @@ export default function Message({ variant, text, setMessage }: IProps) {
   useEffect(() => {
     setTimeout(() => {
       setShowAlert(false)
-      setMessage({show: false, variant: '', text: ''})
+      setMessage({ show: false, variant: '', text: '' })
     }, 1500)
   }, [setMessage])
 
