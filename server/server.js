@@ -1,21 +1,15 @@
 const express = require('express')
+const path = require('node:path')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const expressServer = express()
-//expressServer.use(express.static(__dirname + '/app'))
-//expressServer.get('/', function (request, response) {
-//  response.sendFile(__dirname + '/app/index.html')
-//})
-//expressServer.get('/signup', function (request, response) {
-//  response.sendFile(__dirname + '/app/index.html')
-//})
-//expressServer.get('/users', function (request, response) {
-//  response.sendFile(__dirname + '/app/index.html')
-//})
+const app = express()
+require('dotenv').config()
+
+app.use(express.static(path.join(__dirname, '..', 'client', 'build')))
 const JSONParser = express.json({ type: 'application/json' })
 
 mongoose.connect(
-  'mongodb+srv://user12345:12345@cluster1.mgmwwie.mongodb.net/manageUsers',
+  process.env.DATABASE_URL,
   {
     useUnifiedTopology: true,
     useNewUrlParser: true,
@@ -24,7 +18,7 @@ mongoose.connect(
     if (err) return console.log(err)
     else if (mongoose.connection.readyState === 1)
       console.log('Mongoose connection established')
-    expressServer.listen(process.env.PORT || 3001, function () {
+    app.listen(process.env.PORT || 3001, function () {
       console.log(`The server is up at PORT ${process.env.PORT || 3001}`)
     })
   }
@@ -41,14 +35,14 @@ const usersScheme = new Schema({
 })
 const User = mongoose.model('User', usersScheme)
 
-expressServer.get('/getusers', (request, response) => {
+app.get('/getusers', (request, response) => {
   User.find({}, (err, users) => {
     if (err) console.log(err)
     else response.send(users)
   })
 })
 
-expressServer.post('/users', JSONParser, async (request, response) => {
+app.post('/users', JSONParser, async (request, response) => {
   const newUser = new User(request.body)
   try {
     let existingName = await User.findOne({
@@ -74,7 +68,7 @@ expressServer.post('/users', JSONParser, async (request, response) => {
   }
 })
 
-expressServer.delete('/users', (request, response) => {
+app.delete('/users', (request, response) => {
   let userIds = JSON.parse(request.headers.ids)
   User.deleteMany({ _id: userIds })
     .then(() => {
@@ -86,7 +80,7 @@ expressServer.delete('/users', (request, response) => {
     })
 })
 
-expressServer.put('/users/block', (request, response) => {
+app.put('/users/block', (request, response) => {
   let userIds = JSON.parse(request.headers.ids)
   User.updateMany({ _id: userIds }, { active: request.headers.active })
     .then(() => {
@@ -98,7 +92,7 @@ expressServer.put('/users/block', (request, response) => {
     })
 })
 
-expressServer.post('/users/auth', (request, response) => {
+app.post('/users/auth', (request, response) => {
   const UTCDate = new Date().toUTCString()
   const longDate = `${
     /\d{1,2}\s\D{3}\s\d{4}\s\d{1,2}:\d{1,2}:\d{1,2}/.exec(UTCDate)[0]
@@ -117,11 +111,16 @@ expressServer.post('/users/auth', (request, response) => {
   })
 })
 
-expressServer.get('/users/status', (request, response) => {
+app.get('/users/status', (request, response) => {
   if (!request.headers._id) response.send(false)
   else {
   User.findById(request.headers._id, (err, user) => {
     if (err) console.log(err)
     response.send(user.active)
   })}
+})
+
+// this should be after all other endpoints, do not move
+app.get('*', (_, res) => {
+  res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'))
 })
